@@ -25,6 +25,8 @@ app.use(verifyMutationToken);
 app.use("/api/auth", authRoutes);
 app.use("/api/memberships", membershipsRoutes);
 
+app.get("/", (req, res) => res.send("Server is running!"));
+
 app.get("/api/health", async (req, res) => {
    try {
       await db.raw("SELECT 1");
