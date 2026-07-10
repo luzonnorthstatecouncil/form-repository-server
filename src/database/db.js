@@ -12,7 +12,7 @@ if (!config) {
 const db = knex(config);
 try {
    db.raw("SELECT 1");
-   console.log("Database connected successfully!");
+   console.log("Database connected successfully!. [SUCCESS]");
 } catch (error) {
    console.log(`Database connection failed. [ERROR]: ${error instanceof Error ? error.message : String(error)}`);
 }
