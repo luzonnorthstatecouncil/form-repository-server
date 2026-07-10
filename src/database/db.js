@@ -17,6 +17,7 @@ const db = knex(config);
       console.log("Database connected successfully!. [SUCCESS]");
    } catch (error) {
       console.log(`Database connection failed. [ERROR]: ${error instanceof Error ? error.message : String(error)}`);
+      console.log(config);
    }
 })();
 
