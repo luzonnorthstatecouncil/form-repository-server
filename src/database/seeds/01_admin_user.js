@@ -3,12 +3,12 @@ import bcrypt from "bcryptjs";
 export const seed = async (knex) => {
    await knex("users").where({ username: "admin" }).delete();
 
-   const hashedPassword = await bcrypt.hash("test", 12);
+   const hashedPassword = await bcrypt.hash("!2023luzon_", 12);
 
    await knex("users").insert({
-      full_name: "Administrator",
-      username: "admin",
-      email: "admin@formrepository.local",
+      full_name: "Luzon North State Council",
+      username: "luzonnorth",
+      email: "luzonnorthstatecouncil@gmail.com",
       password: hashedPassword,
       role: "admin",
       status: "active",
