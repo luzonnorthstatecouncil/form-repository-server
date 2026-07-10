@@ -7,9 +7,10 @@ import db from "./database/db.js";
 import authRoutes from "./features/auth/auth.routes.js";
 import membershipsRoutes from "./features/memberships/memberships.routes.js";
 import { verifyMutationToken } from "./middleware/auth.middleware.js";
+import env from "./config/env.js";
 
 const app = express();
-const PORT = env.PORT;
+const PORT = env.PORT || 5000;
 
 const corsOptions = {
    origin: ["https://forms.knightstech.org", "https://forms.knightstech.org/"],

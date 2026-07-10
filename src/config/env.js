@@ -40,6 +40,7 @@ if (result.error) {
 export const env = {
    // Server
    NODE_ENV: process.env.NODE_ENV || "development",
+   PORT: process.env.PORT || 5000,
 
    // Database
    DB_HOST: process.env.DB_HOST || "127.0.0.1",
