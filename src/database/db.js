@@ -10,11 +10,14 @@ if (!config) {
 }
 
 const db = knex(config);
-try {
-   await db.raw("SELECT 1");
-   console.log("Database connected successfully!. [SUCCESS]");
-} catch (error) {
-   console.log(`Database connection failed. [ERROR]: ${error instanceof Error ? error.message : String(error)}`);
-}
+
+(async () => {
+   try {
+      await db.raw("SELECT 1");
+      console.log("Database connected successfully!. [SUCCESS]");
+   } catch (error) {
+      console.log(`Database connection failed. [ERROR]: ${error instanceof Error ? error.message : String(error)}`);
+   }
+})();
 
 export default db;
