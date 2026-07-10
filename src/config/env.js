@@ -52,9 +52,9 @@ export const env = {
   // JWT
   JWT_SECRET: process.env.JWT_SECRET,
   SESSION_HOURS: parseInt(process.env.SESSION_HOURS || "8", 10),
-  JWT_EXPIRES_IN=process.env.JWT_EXPIRES_IN,
-  JWT_REFRESH_SECRET=process.env.JWT_REFRESH_SECRET,
-  JWT_REFRESH_EXPIRES_IN=process.env.JWT_REFRESH_EXPIRES_IN,
+  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN,
+  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
+  JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN,
   
   // Email
   MAIL_HOST: process.env.MAIL_HOST || "smtp.gmail.com",

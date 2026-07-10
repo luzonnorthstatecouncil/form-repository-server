@@ -1,5 +1,5 @@
 import "dotenv/config";
-import env from "./src/config/env";
+import env from "./src/config/env.js";
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
