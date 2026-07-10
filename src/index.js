@@ -12,7 +12,7 @@ const app = express();
 const PORT = env.PORT || 5000;
 
 const corsOptions = {
-   origin: ["https://forms.knightstech.org/"],
+   origin: ["https://forms.knightstech.org"],
    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
    allowedHeaders: ["Content-Type", "Authorization"],
    optionsSuccessStatus: 204,
