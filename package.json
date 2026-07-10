@@ -1,35 +1,38 @@
 {
-  "name": "form-repository-server",
-  "version": "1.0.0",
-  "description": "Backend server for Form Repository",
-  "main": "src/index.js",
-  "type": "module",
-  "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "knex": "knex"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rbiden/form-repository-server.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/rbiden/form-repository-server/issues"
-  },
-  "homepage": "https://github.com/rbiden/form-repository-server#readme",
-  "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "knex": "^3.2.10",
-    "mysql2": "^3.22.4"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.14"
-  }
+   "name": "form-repository-server",
+   "version": "1.0.0",
+   "description": "Backend server for Form Repository",
+   "main": "src/index.js",
+   "type": "module",
+   "scripts": {
+      "start": "node src/index.js",
+      "dev": "nodemon src/index.js",
+      "knex": "knex",
+      "migrate": "knex migrate:latest",
+      "seed": "knex seed:run",
+      "deploy": "knex migrate:latest --env production && npm start"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/rbiden/form-repository-server.git"
+   },
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "bugs": {
+      "url": "https://github.com/rbiden/form-repository-server/issues"
+   },
+   "homepage": "https://github.com/rbiden/form-repository-server#readme",
+   "dependencies": {
+      "bcryptjs": "^3.0.3",
+      "cors": "^2.8.6",
+      "dotenv": "^17.4.2",
+      "express": "^5.2.1",
+      "jsonwebtoken": "^9.0.3",
+      "knex": "^3.2.10",
+      "mysql2": "^3.22.4"
+   },
+   "devDependencies": {
+      "nodemon": "^3.1.14"
+   }
 }
