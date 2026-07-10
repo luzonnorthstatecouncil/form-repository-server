@@ -3,12 +3,13 @@ import bcrypt from "bcryptjs";
 import { findByIdentifier, findById } from "../users/user.service.js";
 import { createAuditLog } from "../audit-logs/audit-log.service.js";
 import * as sessionService from "./session.service.js";
+import env from "../../config/env.js";
 
 const signAccessToken = (payload) =>
-   jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+   jwt.sign(payload, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN });
 
 const signRefreshToken = (payload) =>
-   jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN });
+   jwt.sign(payload, env.JWT_REFRESH_SECRET, { expiresIn: env.JWT_REFRESH_EXPIRES_IN });
 
 export const login = async (identifier, password, ipAddress, userAgent) => {
    const user = await findByIdentifier(identifier);
@@ -66,7 +67,7 @@ export const refresh = async (refreshToken, ipAddress, userAgent) => {
    if (!session) throw { status: 401, message: "Invalid or expired session" };
 
    // Verify JWT signature
-   const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+   const decoded = jwt.verify(refreshToken, env.JWT_REFRESH_SECRET);
 
    const payload = { id: decoded.id, role: decoded.role };
    const token = signAccessToken(payload);

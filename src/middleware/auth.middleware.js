@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { getSessionByToken } from "../features/auth/session.service.js";
+import env from "../config/env.js";
 
 export const authenticate = async (req, res, next) => {
    const authHeader = req.headers.authorization;
@@ -10,8 +11,8 @@ export const authenticate = async (req, res, next) => {
    const token = authHeader.split(" ")[1];
 
    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      
+      const decoded = jwt.verify(token, env.JWT_SECRET);
+
       const session = await getSessionByToken(token);
       if (!session) {
          return res.status(401).json({ error: "Session has expired or is invalid" });
@@ -24,12 +25,14 @@ export const authenticate = async (req, res, next) => {
    }
 };
 
-export const authorize = (...roles) => (req, res, next) => {
-   if (!roles.includes(req.user?.role)) {
-      return res.status(403).json({ error: "Insufficient permissions" });
-   }
-   next();
-};
+export const authorize =
+   (...roles) =>
+   (req, res, next) => {
+      if (!roles.includes(req.user?.role)) {
+         return res.status(403).json({ error: "Insufficient permissions" });
+      }
+      next();
+   };
 
 export const verifyMutationToken = async (req, res, next) => {
    const mutations = ["POST", "PUT", "DELETE", "PATCH"];
@@ -53,7 +56,7 @@ export const verifyMutationToken = async (req, res, next) => {
 
       const token = authHeader.split(" ")[1];
       try {
-         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+         const decoded = jwt.verify(token, env.JWT_SECRET);
          const session = await getSessionByToken(token);
          if (!session) {
             return res.status(401).json({ error: "Unauthorized: Session is invalid or expired" });
