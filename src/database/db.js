@@ -9,8 +9,12 @@ if (!config) {
    throw new Error(`Database configuration for environment "${environment}" not found in knexfile.js`);
 }
 
-console.log("Database connected successfully!");
-
 const db = knex(config);
+try {
+   db.raw("SELECT 1");
+   console.log("Database connected successfully!");
+} catch (error) {
+   console.log(`Database connection failed. [ERROR]: ${error instanceof Error ? error.message : String(error)}`);
+}
 
 export default db;
