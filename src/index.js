@@ -9,7 +9,7 @@ import membershipsRoutes from "./features/memberships/memberships.routes.js";
 import { verifyMutationToken } from "./middleware/auth.middleware.js";
 
 const app = express();
-const PORT = env.PORT || 5000;
+const PORT = env.PORT;
 
 const corsOptions = {
    origin: ["https://forms.knightstech.org", "https://forms.knightstech.org/"],
