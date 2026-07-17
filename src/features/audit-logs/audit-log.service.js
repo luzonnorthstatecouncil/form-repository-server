@@ -1,17 +1,5 @@
 import db from "../../database/db.js";
 
-/**
- * Reusable audit log recorder.
- *
- * @param {object} params
- * @param {number|null} params.userId      - ID of the authenticated user (null for pre-auth events)
- * @param {string}      params.actorName   - Display name of the actor
- * @param {string}      params.action      - Event key e.g. "USER_LOGIN", "TEMPLATE_CREATED"
- * @param {string}      [params.entity]    - Resource type e.g. "User", "Template"
- * @param {number}      [params.entityId]  - ID of the affected resource
- * @param {object}      [params.metadata]  - Any extra structured data
- * @param {string}      [params.ipAddress] - Client IP
- */
 export const createAuditLog = async ({
    userId = null,
    actorName,
@@ -30,4 +18,56 @@ export const createAuditLog = async ({
       metadata: metadata ? JSON.stringify(metadata) : null,
       ip_address: ipAddress,
    });
+};
+
+export const findAllAuditLogs = async ({
+   search,
+   action,
+   date_from,
+   date_to,
+   page = 1,
+   limit = 20,
+} = {}) => {
+   const offset = (page - 1) * limit;
+
+   const applyFilters = (query) => {
+      if (search) {
+         const like = `%${search.toLowerCase()}%`;
+         query.where((q) =>
+            q
+               .orWhereRaw("LOWER(actor_name) LIKE ?", [like])
+               .orWhereRaw("LOWER(action) LIKE ?", [like])
+               .orWhereRaw("LOWER(entity) LIKE ?", [like])
+         );
+      }
+      if (action) query.where("action", action);
+      if (date_from) query.where("created_at", ">=", new Date(date_from));
+      if (date_to) {
+         const end = new Date(date_to);
+         end.setHours(23, 59, 59, 999);
+         query.where("created_at", "<=", end);
+      }
+      return query;
+   };
+
+   const [{ total }] = await applyFilters(db("audit_logs").count("id as total"));
+
+   const rows = await applyFilters(
+      db("audit_logs").select(
+         "id", "user_id", "actor_name", "action", "entity", "entity_id",
+         "metadata", "ip_address", "created_at"
+      )
+   )
+      .orderBy("created_at", "desc")
+      .limit(limit)
+      .offset(offset);
+
+   const logs = rows.map((row) => {
+      if (typeof row.metadata === "string") {
+         try { row.metadata = JSON.parse(row.metadata); } catch (e) {}
+      }
+      return row;
+   });
+
+   return { logs, total: Number(total), page: Number(page), limit: Number(limit) };
 };

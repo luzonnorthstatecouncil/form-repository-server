@@ -6,5 +6,6 @@ const router = Router();
 
 router.post("/", membershipsController.create);
 router.get("/", authenticate, membershipsController.list);
+router.post("/log-download", authenticate, membershipsController.downloadPdf);
 
 export default router;

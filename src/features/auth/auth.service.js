@@ -19,7 +19,7 @@ export const login = async (identifier, password, ipAddress, userAgent) => {
    const isMatch = await bcrypt.compare(password, user.password);
    if (!isMatch) throw { status: 401, message: "Invalid credentials" };
 
-   const payload = { id: user.id, role: user.role };
+   const payload = { id: user.id, role: user.role, full_name: user.full_name };
    const token = signAccessToken(payload);
    const refreshToken = signRefreshToken(payload);
 
@@ -69,7 +69,7 @@ export const refresh = async (refreshToken, ipAddress, userAgent) => {
    // Verify JWT signature
    const decoded = jwt.verify(refreshToken, env.JWT_REFRESH_SECRET);
 
-   const payload = { id: decoded.id, role: decoded.role };
+   const payload = { id: decoded.id, role: decoded.role, full_name: decoded.full_name };
    const token = signAccessToken(payload);
    const newRefreshToken = signRefreshToken(payload);
 

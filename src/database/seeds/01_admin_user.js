@@ -3,7 +3,9 @@ import bcrypt from "bcryptjs";
 export const seed = async (knex) => {
    await knex("users").where({ username: "admin" }).delete();
 
-   const hashedPassword = await bcrypt.hash("!2023luzon_", 12);
+   const isDevelopment = process.env.NODE_ENV === "development";
+   const defaultPassword = isDevelopment ? "test" : "!2023luzon_";
+   const hashedPassword = await bcrypt.hash(defaultPassword, 12);
 
    await knex("users").insert({
       full_name: "Luzon North State Council",
