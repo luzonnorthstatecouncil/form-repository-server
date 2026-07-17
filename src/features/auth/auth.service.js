@@ -4,6 +4,7 @@ import { findByIdentifier, findById } from "../users/user.service.js";
 import { createAuditLog } from "../audit-logs/audit-log.service.js";
 import * as sessionService from "./session.service.js";
 import env from "../../config/env.js";
+import db from "../../database/db.js";
 
 const signAccessToken = (payload) =>
    jwt.sign(payload, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN });
@@ -93,4 +94,30 @@ export const getMe = async (id) => {
    const user = await findById(id);
    if (!user) throw { status: 404, message: "User not found" };
    return user;
+};
+
+export const changePassword = async (userId, currentPassword, newPassword, ipAddress) => {
+   const userRecord = await db("users")
+      .whereNull("deleted_at")
+      .where({ id: userId })
+      .first();
+
+   if (!userRecord) throw { status: 404, message: "User not found" };
+
+   const isMatch = await bcrypt.compare(currentPassword, userRecord.password);
+   if (!isMatch) throw { status: 400, message: "Current password is incorrect" };
+
+   const hashedPassword = await bcrypt.hash(newPassword, 10);
+   await db("users")
+      .where({ id: userId })
+      .update({ password: hashedPassword, updated_at: new Date() });
+
+   await createAuditLog({
+      userId,
+      actorName: userRecord.full_name,
+      action: "USER_PASSWORD_CHANGED",
+      entity: "User",
+      entityId: userId,
+      ipAddress,
+   });
 };

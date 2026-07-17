@@ -59,3 +59,22 @@ export const getMe = async (req, res) => {
       return res.status(err.status || 500).json({ error: err.message });
    }
 };
+
+export const changePassword = async (req, res) => {
+   const { currentPassword, newPassword } = req.body;
+   if (!currentPassword || !newPassword) {
+      return res.status(400).json({ error: "Current and new passwords are required" });
+   }
+
+   try {
+      await authService.changePassword(
+         req.user.id,
+         currentPassword,
+         newPassword,
+         getIp(req),
+      );
+      return res.json({ message: "Password updated successfully" });
+   } catch (err) {
+      return res.status(err.status || 500).json({ error: err.message });
+   }
+};
