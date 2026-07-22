@@ -9,7 +9,7 @@ export const list = async (req, res) => {
          date_from,
          date_to,
          page: page ? Number(page) : 1,
-         limit: limit ? Number(limit) : 20,
+         limit: limit ? Number(limit) : 10,
       });
       return res.json(result);
    } catch (err) {

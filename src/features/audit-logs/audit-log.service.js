@@ -26,7 +26,7 @@ export const findAllAuditLogs = async ({
    date_from,
    date_to,
    page = 1,
-   limit = 20,
+   limit = 10,
 } = {}) => {
    const offset = (page - 1) * limit;
 
@@ -37,7 +37,7 @@ export const findAllAuditLogs = async ({
             q
                .orWhereRaw("LOWER(actor_name) LIKE ?", [like])
                .orWhereRaw("LOWER(action) LIKE ?", [like])
-               .orWhereRaw("LOWER(entity) LIKE ?", [like])
+               .orWhereRaw("LOWER(entity) LIKE ?", [like]),
          );
       }
       if (action) query.where("action", action);
@@ -54,9 +54,16 @@ export const findAllAuditLogs = async ({
 
    const rows = await applyFilters(
       db("audit_logs").select(
-         "id", "user_id", "actor_name", "action", "entity", "entity_id",
-         "metadata", "ip_address", "created_at"
-      )
+         "id",
+         "user_id",
+         "actor_name",
+         "action",
+         "entity",
+         "entity_id",
+         "metadata",
+         "ip_address",
+         "created_at",
+      ),
    )
       .orderBy("created_at", "desc")
       .limit(limit)
@@ -64,7 +71,9 @@ export const findAllAuditLogs = async ({
 
    const logs = rows.map((row) => {
       if (typeof row.metadata === "string") {
-         try { row.metadata = JSON.parse(row.metadata); } catch (e) {}
+         try {
+            row.metadata = JSON.parse(row.metadata);
+         } catch (e) {}
       }
       return row;
    });
